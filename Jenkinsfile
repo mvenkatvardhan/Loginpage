@@ -13,6 +13,15 @@ pipeline {
             }
         }
 
+        stage('Build Frontend') {
+            steps {
+                dir('frontend') {
+                    bat 'npm install'
+                    bat 'npm run build'
+                }
+            }
+        }
+
         stage('Build Backend') {
             steps {
                 dir('backend') {
@@ -20,6 +29,7 @@ pipeline {
                 }
             }
         }
+
         stage('Docker Build') {
             steps {
                 dir('backend') {
@@ -44,4 +54,3 @@ pipeline {
         }
     }
 }
-
