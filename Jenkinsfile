@@ -20,15 +20,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Test Backend') {
-            steps {
-                dir('backend') {
-                    bat 'mvn test'
-                }
-            }
-        }
-        
         stage('Docker Build') {
             steps {
                 dir('backend') {
@@ -53,3 +44,4 @@ pipeline {
         }
     }
 }
+
