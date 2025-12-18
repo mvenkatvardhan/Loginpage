@@ -2,31 +2,38 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "venkatvardhan/Loginpage"
+        IMAGE_NAME = "venkatvardhan/loginpage"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Build') {
+        stage('Build Backend') {
             steps {
-                bat 'mvn clean package'
+                dir('backend') {
+                    bat 'mvn clean package'
+                }
             }
         }
 
-        stage('Test') {
+        stage('Test Backend') {
             steps {
-                bat 'mvn test'
+                dir('backend') {
+                    bat 'mvn test'
+                }
             }
         }
 
         stage('Docker Build') {
             steps {
-                bat 'docker build -t $IMAGE_NAME:$BUILD_NUMBER .'
+                dir('backend') {
+                    bat "docker build -t %IMAGE_NAME%:%BUILD_NUMBER% ."
+                }
             }
         }
 
@@ -38,8 +45,8 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     bat '''
-                    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                    docker push $IMAGE_NAME:$BUILD_NUMBER
+                    echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+                    docker push %IMAGE_NAME%:%BUILD_NUMBER%
                     '''
                 }
             }
