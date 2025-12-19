@@ -15,9 +15,14 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
+<<<<<<< HEAD
                 dir('frontend') {
                     bat 'npm install'
                     bat 'npm run build'
+=======
+                dir('backend') {
+                    bat 'mvn clean package -DskipTests'
+>>>>>>> 5b573e0 (dockercompose)
                 }
             }
         }
@@ -29,7 +34,7 @@ pipeline {
                 }
             }
         }
-
+        
         stage('Docker Build') {
             steps {
                 dir('backend') {

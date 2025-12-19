@@ -5,4 +5,3 @@ import com.example.backend.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 }
-

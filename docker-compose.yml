@@ -1,33 +1,32 @@
-version: "3.9"
+version: "3.8"
 
 services:
   postgres:
     image: postgres:15
     container_name: postgres-db
     environment:
-      POSTGRES_DB: fullstackdb
+      POSTGRES_DB: users
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: root
     ports:
       - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
 
   backend:
-    build: ./backend
+    image: project1-backend
     container_name: spring-backend
-    ports:
-      - "8080:8080"
     depends_on:
       - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/users
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
 
   frontend:
-    build: ./frontend
+    image: project1-frontend
     container_name: react-frontend
     ports:
       - "3000:3000"
     depends_on:
       - backend
-
-volumes:
-  pgdata:
